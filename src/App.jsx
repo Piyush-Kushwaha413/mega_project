@@ -23,6 +23,7 @@ function App() {
     })
     .catch((error)=>{
       console.log("error in getCurrentUser form dataBase"+error)
+      
     }
     )
     .finally(

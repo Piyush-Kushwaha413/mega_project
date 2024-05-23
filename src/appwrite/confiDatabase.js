@@ -87,15 +87,14 @@ export class Service{
     }
     async getPost(slug){
         try {
-            await this.databases.getDocument(
+            console.log("getting post ");
+           return await this.databases.getDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug
             )
-
-            
         } catch (error) {
-            console.log();
+           return console.log(error);
             
         }
     }
