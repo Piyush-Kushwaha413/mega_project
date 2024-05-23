@@ -16,6 +16,7 @@ import AddPost from "../Pages/AddPost";
 import  AllPostCard  from "../Pages/AllPostCard";
 import EditPost from "../Pages/EditPost";
 import Home from "../Pages/Home";
+import Post from "../Pages/Posts";
 
 
 
@@ -37,7 +38,8 @@ export {
     AddPost,
     AllPostCard,
     EditPost,
-    Home
+    Home,
+    Post
 
     
 }

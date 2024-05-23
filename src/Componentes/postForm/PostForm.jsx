@@ -21,8 +21,8 @@ const navigate = useNavigate();
 const userData = useSelector((state) => state.userData);
 
 const submit = async (data) => {
-    console.log(data);
-    // console.log();
+        console.log(data); 
+   
     if (post) {
         const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
 
@@ -72,6 +72,7 @@ const slugTransform = useCallback((value) => {
 React.useEffect(() => {
     const subscription = watch((value, { name }) => {
         if (name === "title") {
+            
             setValue("slug", slugTransform(value.title), { shouldValidate: true });
         }
     });
@@ -83,6 +84,7 @@ React.useEffect(() => {
   return <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
   <div className="w-2/3 px-2">
       <Input
+          
           label="Title :"
           placeholder="Title"
           className="mb-4"
