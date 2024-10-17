@@ -5,7 +5,7 @@ import appwriteService from "../appwrite/confiDatabase";
 import { ButtonComponent, Container } from "../Componentes/import";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
-import { initializeUseSelector } from "react-redux/es/hooks/useSelector";
+
 
 export default function Post() {
     const [post, setPost] = useState(null);
@@ -15,7 +15,7 @@ export default function Post() {
     const userData = useSelector((state) => state.userData);
 //    const auth = post? post.userId === userData.$id
    const isAuthor = post && userData ? post.userId === userData.$id : false;
-   
+  
  
 
     useEffect(() => {
@@ -25,11 +25,11 @@ export default function Post() {
             .then((post) => {
                 if (post){
                     setPost(post);
-                    // if (userData) {
-                    //     post.userId ===userData.$id
-                    //     setisAuthor(true);
-                    // }
-                    // else(false)
+                    if (userData) {
+                        post.userId ===userData.$id
+                        setisAuthor(true);
+                    }
+                    else(false)
                 } 
                 else{
                     console.log("if post nhi milla");
@@ -56,7 +56,7 @@ export default function Post() {
     return post ? (
  <div className="py-8">
             <Container>
-                <div className="w-full flex flex-col justify-center mb-4 relative border rounded-xl p-2">
+                <div className="w-full flex flex-col justify-center mb-4 relative border-black border rounded-xl p-2">
                 {isAuthor && (
                         <div className=" flex gap-6 self-center my-4 ">
                             <Link to={`/edit-post/${post.$id}`}>
@@ -78,12 +78,13 @@ export default function Post() {
                     
                 </div>
  {/* text Area */}
-                <div  className=" border" >
+                <div  className=" border border-black" >
                 <div className="w-full mb-6 ">
                     <h1 className="text-2xl uppercase underline font-bold">{post.title}</h1>
                 </div>
-                <div className="browser-css">
+                <div className="browser-css px-5 py-3 text-left">
                     {parse(post.content)}
+           
                 </div>
                
                 </div>

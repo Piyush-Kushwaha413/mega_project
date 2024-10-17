@@ -3,13 +3,13 @@ import appwriteService from "../appwrite/confiDatabase";
 import { PostCard, Container } from "../Componentes/import";
 import { useState } from 'react';
 import {useSelector} from 'react-redux'
-import imgUrl from "../assets/appwriteBlog logo.png"
+// import imgUrl from "../assets/appwriteBlog logo.png"
 
 function Home() {
     const[post,setpost] = useState([])
     const authStatus = useSelector(state => state.status)
     useEffect(()=>{
-        console.log(authStatus);
+        // console.log(authStatus);
         appwriteService.getPosts().then((post)=>{
             if (post){
                 console.log(post);} 
@@ -46,12 +46,6 @@ function Home() {
                     </div>
                 )
 
-    
-//     authStatus {
-//     return 
-
-    
-//  }return
 }
 
 export default Home

@@ -2,27 +2,28 @@ import React from "react";
 import { useState, useCallback, useEffect } from "react";
 import  appwriteService  from "../../appwrite/confiDatabase";
 import { useNavigate } from "react-router-dom";
-import { Input, ButtonComponent, RTE, Select } from "../import";
+import { Input, ButtonComponent, RTE, Select,Loader} from "../import";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 // import { data } from "autoprefixer";
 
-function PostForm({post=false}) {
+function PostForm({post}) {
 const { register,  handleSubmit, watch, setValue, control, getValues} =  useForm({
     defaultValues:{
-        title:post?.title || "",
+        title: post?.title || "",
         slug: post?.$id || "",
         content: post?.content || "",
         status: post?.status || "active",
-    }
-})
+    },
+});
 
+
+const [loading,setloading] = useState(false);
 const navigate = useNavigate();
 const userData = useSelector((state) => state.userData);
 
 const submit = async (data) => {
-        console.log(data); 
-   
+        setloading(true)
     if (post) {
         const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
 
@@ -37,6 +38,7 @@ const submit = async (data) => {
 
         if (dbPost) {
             navigate(`/post/${dbPost.$id}`);
+            setloading(false);
         }
     } else {
         try {
@@ -47,15 +49,14 @@ const submit = async (data) => {
             const dbPost = await appwriteService.createPost({ ...data, userId: userData.$id });
             if (dbPost) {
                 // navigate(`/post/${dbPost.$id}`);
-                navigate("/")
+                navigate("/"),
+                setloading(false)
             }
         }
         } catch (error) {
             console.log(`line no. 55 in postform.jsx, error :${error} `);
-        }
-       
+        }  
     }
- 
 };
 
 const slugTransform = useCallback((value) => {
@@ -70,9 +71,9 @@ const slugTransform = useCallback((value) => {
 }, []);
 
 React.useEffect(() => {
+    console.log(getValues("content")) 
     const subscription = watch((value, { name }) => {
-        if (name === "title") {
-            
+        if (name === "title") {   
             setValue("slug", slugTransform(value.title), { shouldValidate: true });
         }
     });
@@ -84,25 +85,31 @@ React.useEffect(() => {
   return <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
   <div className="w-2/3 px-2">
       <Input
-          
+      value = {post && post.title}
           label="Title :"
           placeholder="Title"
           className="mb-4"
+          
           {...register("title", { required: true })}
+        
+          
+
       />
       <Input
+
           label="Slug :"
           placeholder="Slug"
           className="mb-4"
           {...register("slug", { required: true })}
           onInput={(e) => {
-              setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
+              setValue("slug",slugTransform(e.currentTarget.value) , { shouldValidate: true });
           }}
       />
-      <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
+      <RTE label="Content :" name="content" control={control} defaultValue={post && post.content} />
   </div>
   <div className="w-1/3 px-2">
       <Input
+
           label="Featured Image :"
           type="file"
           className="mb-4"
@@ -125,9 +132,11 @@ React.useEffect(() => {
           {...register("status", { required: true })}
       />
       <ButtonComponent
-       type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
+       type="submit" bgColor={post ? "bg-[#6b7280]" : undefined} className="w-full flex gap-1">
           {post ? "Update" : "Submit"}
+         {loading ? <Loader></Loader>: ""}
       </ButtonComponent>
+    
   </div>
 </form>;
 }
